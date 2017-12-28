@@ -1,11 +1,13 @@
 package com.app.content.liquorfinderapp;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View.OnClickListener;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -19,21 +21,20 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText editText;
-    Button submitButton;
+    private EditText emailText;
+    Button queryButton;
     ProgressBar progressBar;
-    TextView textBox;
     String result;
-    String strUrl = "https://www.facebook.com/";
+    String strUrl = "https://data.cityofchicago.org/resource/nrmj-3kcf.json?account_number=";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        editText = (EditText)findViewById(R.id.EditTextName);
-        submitButton = (Button)this.findViewById(R.id.button2);
-        submitButton.setOnClickListener(submitListner);
+        emailText = (EditText)findViewById(R.id.emailText);
+        queryButton = (Button)this.findViewById(R.id.queryButton);
+        queryButton.setOnClickListener(submitListner);
 
     }
 
@@ -42,22 +43,14 @@ public class MainActivity extends AppCompatActivity {
     {
         public void onClick(View v)
         {
-
-            setData(editText.getText().toString());
             new RetriveData().execute();
-            //setData(new RetriveData().doInBackground());
         }
     };
 
-    protected void setData(String data){
-
-        textBox = findViewById(R.id.textView);
-        textBox.setText(data);
-
-    }
 
     public class RetriveData extends AsyncTask<String, String, String> {
-        ProgressBar progressBar = findViewById(R.id.progressBar2);
+        ProgressBar progressBar = findViewById(R.id.progressBar);
+        TextView responseView = findViewById(R.id.responseView);
 
         @Override
         protected void onPreExecute() {
@@ -67,21 +60,33 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            //super.onPostExecute(s);
+            View view = this.responseView;
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
             progressBar.setVisibility(View.GONE);
-            Toast.makeText(MainActivity.this, "The output is:" + result, Toast.LENGTH_LONG).show();
+            responseView.setText(result);
         }
 
         @Override
         protected String doInBackground(String... strings) {
             try {
-                URL url = new URL(strUrl);
+                URL url = new URL(strUrl + emailText.getText().toString());
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
                 con.setRequestMethod("GET");
                 con.connect();
 
                 BufferedReader bf = new BufferedReader(new InputStreamReader(con.getInputStream()));
-                String value = bf.readLine();
+                StringBuilder stringBuilder = new StringBuilder();
+                String line;
+                while ((line = bf.readLine()) != null) {
+                    stringBuilder.append(line).append("\n");
+                }
+                bf.close();
+                String value =  stringBuilder.toString();
+
+
                 Log.i("debug", value);
                 result = value;
 
