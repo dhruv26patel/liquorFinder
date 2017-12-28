@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">LiquorFinderApp</string>
+    <string name="button">\@stringButton</string>
+    <string name="textView">TEXT VIEW</string>
+    <string name="submitButton">SUBMIT BUTTON</string>
+    <string name="editText">EDIT TEXT</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.app.dhruvpatel.liquorfinderapp;
+package com.app.content.liquorfinderapp;
 
 import org.junit.Test;
 
