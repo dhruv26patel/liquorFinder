@@ -19,12 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,7 +34,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private EditText inputText;
-    //private TextView responseView;
     private Button queryButton;
     private ProgressBar progressBar;
     private LocationManager locationManager;
@@ -64,10 +58,8 @@ public class MainActivity extends AppCompatActivity {
         //Bind views to fields
         inputText = (EditText) findViewById(R.id.emailText);
         queryButton = (Button) findViewById(R.id.queryButton);
-        //responseView = (TextView) findViewById(R.id.responseView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-
         mainListView = (ListView) findViewById( R.id.mainListView );
 
         //Set listeners
@@ -75,7 +67,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Retrieve current location data using the google location service
+     */
     void getLocation() {
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -96,6 +90,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Request permission when location service is turned off
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -126,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
             //Obtain array which only has a json object in it
             JSONArray storeArray = new JSONArray(data);
             ArrayList<String> planetList = new ArrayList<String>();
-//            JSONObject storeData = storeArray.getJSONObject(0);
 
             for( int i = 0; i < storeArray.length(); i++){
 
@@ -153,8 +149,6 @@ public class MainActivity extends AppCompatActivity {
 
                 String fullAddress = (address + "\n" + city + ", " + state + " " + zip);
 
-                //responseView.setText(businessName + "\n" + fullAddress + "\n" +
-                //        "Distance: " + Math.round(distance * 100) / 100 + " miles");
 
                 String str = businessName + "\n" + fullAddress + "\n" +
                         "Distance: " + Math.round(distance * 100) / 100 + " miles";
@@ -218,7 +212,6 @@ public class MainActivity extends AppCompatActivity {
             }
             //Hide progress bar and parse data
             progressBar.setVisibility(View.GONE);
-            //responseView.setText(result);
             parseJSON(result);
         }
     }
