@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">LiquorFinderApp</string>
-    <string name="editText">Enter Account Number</string>
+    <string name="editText">Enter Business Name</string>
     <string name="submitButton">Search</string>
 </resources>
