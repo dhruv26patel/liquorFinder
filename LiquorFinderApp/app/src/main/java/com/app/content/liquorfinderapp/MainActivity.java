@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             //Obtain array which only has a json object in it
             JSONArray storeArray = new JSONArray(data);
-            ArrayList<String> planetList = new ArrayList<String>();
+            ArrayList<String> storetList = new ArrayList<String>();
 
             for( int i = 0; i < storeArray.length(); i++){
 
@@ -152,9 +152,9 @@ public class MainActivity extends AppCompatActivity {
 
                 String str = businessName + "\n" + fullAddress + "\n" +
                         "Distance: " + Math.round(distance * 100) / 100 + " miles";
-                planetList.add(str);
+                storetList.add(str);
             }
-            listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, planetList);
+            listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, storetList);
             mainListView.setAdapter( listAdapter );
 
         } catch (JSONException e) {
